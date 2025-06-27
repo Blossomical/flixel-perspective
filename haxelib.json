@@ -1,0 +1,21 @@
+{
+    "name": "flixel-perspective",
+    "url": "https://github.com/Blossomical/flixel-perspective",
+    "license": "MIT",
+    "tags": [
+        "flixel",
+        "openfl",
+        "game",
+        "extension"
+    ],
+    "description": "3D Rotation system for FlxSprites and FlxTexts with perspective and depth",
+    "version": "1.0.0",
+    "releasenote": "First Release",
+    "classPath": "src/",
+    "contributors": [
+        "Blossomical"
+    ],
+    "dependencies": {
+        "flixel": ""
+    }
+}
