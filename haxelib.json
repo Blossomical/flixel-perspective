@@ -11,7 +11,6 @@
     "description": "3D Rotation system for FlxSprites and FlxTexts with perspective and depth",
     "version": "1.0.0",
     "releasenote": "First Release",
-    "classPath": "src/",
     "contributors": [
         "Blossomical"
     ],
