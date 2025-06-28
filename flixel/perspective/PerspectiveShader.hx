@@ -2,7 +2,8 @@ package flixel.perspective;
 
 import flixel.system.FlxAssets.FlxShader;
 
-class PerspectiveShader extends FlxShader {
+class PerspectiveShader extends FlxShader
+{
 	@:glVertexHeader('
 		#pragma header
 
@@ -93,9 +94,15 @@ class PerspectiveShader extends FlxShader {
 			#pragma body
 		}
 	')
-	public function new() {
+	public function new()
+	{
 		super();
 		data.zCoord.value = [1];
 		data.fov.value = [Math.PI / 2];
+		data.angleY.value = [0];
+		data.angleX.value = [0];
+		data.centerOffset.value = [0, 0];
+		data.depthColor.value = [0, 0, 0];
+		data.useDepthColor.value = [false];
 	}
 }
