@@ -24,7 +24,7 @@ class PerspectiveGroup extends FlxTypedSpriteGroup<PerspectiveObject>
 	
 	override public function update(elapsed:Float)
 	{
-		forEach(obj -> obj.groupOrigin.set(FlxG.width / 2 - x - originZ.x, FlxG.height / 2 - y - originZ.y));
+		forEach(obj -> obj.groupOrigin.set(FlxG.width / 2 - findMinX() - originZ.x, FlxG.height / 2 - findMinY() - originZ.y));
 		super.update(elapsed);
 	}
 	
