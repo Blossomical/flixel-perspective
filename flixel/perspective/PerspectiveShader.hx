@@ -7,6 +7,10 @@ class PerspectiveShader extends FlxShader
 	@:glVertexHeader('
 		#pragma header
 
+		uniform vec2 groupAngle;
+		uniform vec2 groupOffset;
+		uniform bool groupedAngle;
+
 		uniform float angleX;
 		uniform float angleY;
 		uniform float zCoord;
@@ -15,23 +19,24 @@ class PerspectiveShader extends FlxShader
 		uniform vec2 centerOffset; // important for centering the origin!!
 		varying vec2 vTexCoord;
 		varying float vDepth;
+
+		mat4 rotate3D(float x, float y) {
+			return mat4(
+			  1.0, 0.0, 0.0, 0.0,
+			  0.0, cos(x), -sin(x), 0.0,
+			  0.0, sin(x), cos(x), 0.0,
+			  0.0, 0.0, 0.0, 1.0
+			) * mat4(cos(y), 0.0, sin(y), 0.0,
+			  0.0, 1, 0.0, 0.0,
+			  -sin(y), 0.0, cos(y), 0.0,
+			  0.0, 0.0, 0.0, 1.0
+			);
+		}
 	')
 	@:glVertexBody('
 		#pragma body
 		float zn = 1.0 / tan(fov / 2);
 
-		mat4 matX = mat4(
-		  1.0, 0.0, 0.0, 0.0,
-		  0.0, cos(angleX), -sin(angleX), 0.0,
-		  0.0, sin(angleX), cos(angleX), 0.0,
-		  0.0, 0.0, 0.0, 1.0
-		);
-		mat4 matY = mat4(
-		  cos(angleY), 0.0, sin(angleY), 0.0,
-		  0.0, 1, 0.0, 0.0,
-		  -sin(angleY), 0.0, cos(angleY), 0.0,
-		  0.0, 0.0, 0.0, 1.0
-		);
 		mat4 projection = mat4(
 		  zn, 0.0, 0.0, 0.0,
 		  0.0, zn, 0.0, 0.0,
@@ -58,9 +63,17 @@ class PerspectiveShader extends FlxShader
 		); // thanks to checkmate50 on discord for helping me on this!!
 
 		gl_Position.z = zCoord;
-		gl_Position = projection * (translateNegZ * ((matX * matY) * (translateZ * gl_Position)));
+		gl_Position = projection * (translateNegZ * (rotate3D(angleX, angleY) * (translateZ * gl_Position)));
 		gl_Position.w = gl_Position.z;
 		gl_Position.xy -= normalizedOffset.xy * gl_Position.w;
+
+		if (groupedAngle) {
+			vec4 normalizedGrpOffset = openfl_Matrix * vec4(groupOffset, 0.0, 0.0);
+			gl_Position.xy += normalizedGrpOffset.xy;
+			gl_Position = translateNegZ * (rotate3D(groupAngle.x, groupAngle.y) * (translateZ * gl_Position));
+			gl_Position.w = gl_Position.z;
+			gl_Position.xy -= normalizedGrpOffset.xy * gl_Position.w;
+		}
 
 		vTexCoord = openfl_TextureCoordv;
 		vDepth = gl_Position.w;
@@ -101,8 +114,11 @@ class PerspectiveShader extends FlxShader
 		data.fov.value = [Math.PI / 2];
 		data.angleY.value = [0];
 		data.angleX.value = [0];
+		data.groupAngle.value = [0, 0];
 		data.centerOffset.value = [0, 0];
+		data.groupOffset.value = [0, 0];
 		data.depthColor.value = [0, 0, 0];
 		data.useDepthColor.value = [false];
+		data.groupedAngle.value = [false];
 	}
 }
