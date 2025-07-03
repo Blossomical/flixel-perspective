@@ -11,7 +11,7 @@ import flixel.perspective.PerspectiveSprite.IPerspectiveSprite;
 import flixel.perspective.IPerspectiveObject;
 import flixel.group.FlxSpriteGroup;
 
-class PerspectiveGroup extends FlxTypedSpriteGroup<PerspectiveObject>
+class PerspectiveGroup extends FlxTypedSpriteGroup<PerspectiveObject> implements IPerspectiveObject
 {
 	public var z(default, set):Float = 0;
 	
@@ -22,16 +22,54 @@ class PerspectiveGroup extends FlxTypedSpriteGroup<PerspectiveObject>
 	public var useDepthColor(default, set):Bool = false;
 	public var depthColor(default, set):FlxColor = 0xFF000000;
 	
+	public var useGroupAngle(default, set):Bool = false;
+	public var groupOrigin:FlxPoint = FlxPoint.get();
+	public var groupAngles:FlxPoint = FlxPoint.get();
+	public var groupZ(default, set):Float = 0;
+	
+	public function new(x:Float = 0, y:Float = 0, maxSize:Int = 0)
+	{
+		super(x, y, maxSize);
+	}
+	
 	override public function update(elapsed:Float)
 	{
-		forEach(obj -> obj.groupOrigin.set(FlxG.width / 2 - findMinX() - originZ.x, FlxG.height / 2 - findMinY() - originZ.y));
+		forEach(obj ->
+		{
+			if (useGroupAngle)
+				obj.groupOrigin.set(groupOrigin.x, groupOrigin.y);
+			else
+				obj.groupOrigin.set((originZ.x /* + groupOrigin.x*/) + findMinX(), (originZ.y /* + groupOrigin.y*/) + findMinY());
+			// if (gobj?.members != null)
+			// 	gobj.groupOrigin.set(originZ.x + groupOrigin.x, originZ.y + groupOrigin.y);
+			// FUCK idk how to handle group origin
+		});
+		// if (useGroupAngle)
+		// 	forEach(obj ->
+		// 	{
+		// 		obj.groupAngles.set_x((angleX * FlxAngle.TO_RAD + (useGroupAngle ? groupAngles.x : 0)));
+		// 		obj.groupAngles.set_y((angleY * FlxAngle.TO_RAD + (useGroupAngle ? groupAngles.y : 0)));
+		// 	});
 		super.update(elapsed);
 	}
 	
 	override public function add(obj:PerspectiveObject):PerspectiveObject
 	{
-		super.add(obj);
-		obj.set_useGroupAngle(true);
+		var gobj:PerspectiveGroup = cast obj;
+		// if (obj?.members == null)
+		// 	obj.set_useGroupAngle(true);
+		// else
+		if (gobj?.members != null)
+		{
+			trace('Adding Groups to a Group is currently not fully supported');
+			gobj.set_useGroupAngle(true);
+			super.add(gobj); // only wrote it twice because i'm still thinking of a way to handle groups properly
+		}
+		else
+		{
+			obj.set_useGroupAngle(true);
+			super.add(obj);
+		}
 		return obj;
 	}
 	
@@ -42,9 +80,15 @@ class PerspectiveGroup extends FlxTypedSpriteGroup<PerspectiveObject>
 	
 	public function set_z(value:Float):Float
 	{
-		forEach(obj -> obj.set_groupZ(value));
+		forEach(obj -> obj.set_groupZ(value /*+ (useGroupAngle ? groupZ : 0))*/));
 		
 		return z = value;
+	}
+	
+	public function set_groupZ(value:Float):Float
+	{
+		forEach(obj -> obj.set_z(z + (useGroupAngle ? value : 0)));
+		return groupZ = value;
 	}
 	
 	public function set_fov(value:Float):Float
@@ -55,13 +99,27 @@ class PerspectiveGroup extends FlxTypedSpriteGroup<PerspectiveObject>
 	
 	private function set_angleX(value:Float):Float
 	{
-		forEach(obj -> obj.groupAngles.x = value * FlxAngle.TO_RAD);
+		forEach(obj ->
+		{
+			var gobj:PerspectiveGroup = cast obj;
+			if (gobj?.members != null)
+				gobj.set_angleX(value);
+			else
+				obj.groupAngles.set_x((value * FlxAngle.TO_RAD /*+ (useGroupAngle ? groupAngles.x : 0)*/));
+		});
 		return angleX = value;
 	}
 	
 	private function set_angleY(value:Float):Float
 	{
-		forEach(obj -> obj.groupAngles.y = value * FlxAngle.TO_RAD);
+		forEach(obj ->
+		{
+			var gobj:PerspectiveGroup = cast obj;
+			if (gobj?.members != null)
+				gobj.set_angleY(value);
+			else
+				obj.groupAngles.set_y((value * FlxAngle.TO_RAD /*+ (useGroupAngle ? groupAngles.y : 0)*/));
+		});
 		return angleY = value;
 	}
 	
@@ -76,4 +134,7 @@ class PerspectiveGroup extends FlxTypedSpriteGroup<PerspectiveObject>
 		forEach(obj -> obj.set_useDepthColor(value));
 		return useDepthColor = value;
 	}
+	
+	public function set_useGroupAngle(value:Bool):Bool
+		return useGroupAngle = value;
 }
