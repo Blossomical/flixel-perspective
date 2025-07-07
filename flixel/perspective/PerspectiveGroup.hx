@@ -1,8 +1,6 @@
 package flixel.perspective;
 
 import flixel.math.FlxAngle;
-import objects.PerspectiveText;
-import objects.PerspectiveSprite;
 import flixel.group.FlxSpriteGroup;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.util.FlxColor;
