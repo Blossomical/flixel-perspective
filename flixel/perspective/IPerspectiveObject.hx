@@ -1,8 +1,8 @@
 package flixel.perspective;
 
 import flixel.FlxBasic.IFlxBasic;
-import flixel.util.FlxColor;
 import flixel.math.FlxPoint;
+import flixel.util.FlxColor;
 
 interface IPerspectiveObject extends IFlxBasic
 {
@@ -18,4 +18,6 @@ interface IPerspectiveObject extends IFlxBasic
 
 @:forward
 @:coreType
-abstract PerspectiveObject from PerspectiveSprite to PerspectiveSprite from PerspectiveText to PerspectiveSprite from IPerspectiveObject to PerspectiveObject {}
+abstract PerspectiveObject from PerspectiveSprite to PerspectiveSprite from PerspectiveText to PerspectiveSprite from IPerspectiveObject to PerspectiveObject
+	from PerspectiveGroup to PerspectiveObject {}
+	
