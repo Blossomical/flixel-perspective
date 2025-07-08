@@ -1,13 +1,13 @@
 package flixel.perspective;
 
-import flixel.math.FlxAngle;
-import flixel.group.FlxSpriteGroup;
 import flixel.group.FlxGroup.FlxTypedGroup;
-import flixel.util.FlxColor;
-import flixel.math.FlxPoint;
-import flixel.perspective.PerspectiveSprite.IPerspectiveSprite;
-import flixel.perspective.IPerspectiveObject;
 import flixel.group.FlxSpriteGroup;
+import flixel.group.FlxSpriteGroup;
+import flixel.math.FlxAngle;
+import flixel.math.FlxPoint;
+import flixel.perspective.IPerspectiveObject;
+import flixel.perspective.PerspectiveSprite.IPerspectiveSprite;
+import flixel.util.FlxColor;
 
 class PerspectiveGroup extends FlxTypedSpriteGroup<PerspectiveObject> implements IPerspectiveObject
 {
@@ -59,7 +59,7 @@ class PerspectiveGroup extends FlxTypedSpriteGroup<PerspectiveObject> implements
 		// else
 		if (gobj?.members != null)
 		{
-			trace('Adding Groups to a Group is currently not fully supported');
+			// Adding Groups to a Group is currently not fully supported
 			gobj.set_useGroupAngle(true);
 			super.add(gobj); // only wrote it twice because i'm still thinking of a way to handle groups properly
 		}
@@ -91,7 +91,7 @@ class PerspectiveGroup extends FlxTypedSpriteGroup<PerspectiveObject> implements
 	
 	public function set_fov(value:Float):Float
 	{
-		forEach(obj -> obj.set_fov(value * FlxAngle.TO_RAD));
+		forEach(obj -> obj.set_fov(value));
 		return fov = value;
 	}
 	
