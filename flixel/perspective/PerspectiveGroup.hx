@@ -16,7 +16,7 @@ class PerspectiveGroup extends FlxTypedSpriteGroup<PerspectiveObject> implements
 	public var fov(default, set):Float = 90;
 	public var angleX(default, set):Float = 0;
 	public var angleY(default, set):Float = 0;
-	public var originZ:FlxPoint = FlxPoint.get();
+	public var originZ:flixel.math.FlxPoint3D = new flixel.math.FlxPoint3D();
 	public var useDepthColor(default, set):Bool = false;
 	public var depthColor(default, set):FlxColor = 0xFF000000;
 	
@@ -73,7 +73,7 @@ class PerspectiveGroup extends FlxTypedSpriteGroup<PerspectiveObject> implements
 	
 	public function centerZOrigin()
 	{
-		originZ.set(width / 2, height / 2);
+		originZ.setTo(width / 2, height / 2, 0);
 	}
 	
 	public function set_z(value:Float):Float

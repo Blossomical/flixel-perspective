@@ -18,7 +18,7 @@ class PerspectiveText extends FlxText implements IPerspectiveSprite
 	public var fov(default, set):Float = 90;
 	public var angleX(default, set):Float = 0;
 	public var angleY(default, set):Float = 0;
-	public var originZ:FlxPoint = FlxPoint.get();
+	public var originZ:flixel.math.FlxPoint3D = new flixel.math.FlxPoint3D();
 	
 	public var useGroupAngle(default, set):Bool = false;
 	public var groupOrigin:FlxPoint = FlxPoint.get();
@@ -42,14 +42,18 @@ class PerspectiveText extends FlxText implements IPerspectiveSprite
 	
 	override public function drawComplex(camera:FlxCamera)
 	{
-		shader.data.centerOffset.value = [FlxG.width / 2 - originZ.x - x, FlxG.height / 2 - originZ.y - y];
-		shader.data.groupOffset.value = [groupOrigin.x, groupOrigin.y];
+		shader.data.centerOffset.value = [
+			FlxG.width / 2 - originZ.x - x,
+			FlxG.height / 2 - originZ.y - y,
+			originZ.z / gameDepth
+		];
+		shader.data.groupOffset.value = [FlxG.width / 2 - groupOrigin.x, FlxG.height / 2 - groupOrigin.y];
 		shader.data.groupAngle.value = [groupAngles.x, groupAngles.y];
 		super.drawComplex(camera);
 	}
 	
 	public inline function centerZOrigin():Void
-		originZ.set(frameWidth * scale.x / 2, frameHeight * scale.y / 2);
+		originZ.setTo(frameWidth * scale.x / 2, frameHeight * scale.y / 2, 0);
 		
 	override public function updateHitbox():Void
 	{

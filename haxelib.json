@@ -9,8 +9,8 @@
         "extension"
     ],
     "description": "3D Rotation system for FlxSprites and FlxTexts with perspective and depth",
-    "version": "1.0.5",
-    "releasenote": "Fixed Fov",
+    "version": "1.0.6",
+    "releasenote": "originZ is now a 3D point!",
     "contributors": [
         "Blossomical"
     ],

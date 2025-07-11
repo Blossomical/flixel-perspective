@@ -1,5 +1,7 @@
 package flixel.perspective;
 
+import flixel.math.FlxAngle;
+import flixel.math.FlxMath;
 import flixel.FlxState;
 import flixel.FlxCamera;
 import flixel.perspective.PerspectiveSprite;
@@ -20,7 +22,13 @@ class PerspectiveState extends FlxState
 			var b1:IPerspectiveObject = cast b1;
 			var b2:IPerspectiveObject = cast b2;
 			
-			return Std.int((b2?.z ?? 1) - (b1?.z ?? 1));
+			var z1:Float = (b1?.z ?? 1);
+			var z2:Float = (b2?.z ?? 1);
+			
+			z1 = z1 + Math.cos(FlxAngle.asRadians(b1?.angleX ?? 0)) * Math.cos(FlxAngle.asRadians(b1?.angleY ?? 0)) * (b1?.originZ?.z ?? 0);
+			z2 = z2 + Math.cos(FlxAngle.asRadians(b2?.angleX ?? 0)) * Math.cos(FlxAngle.asRadians(b2?.angleY ?? 0)) * (b2?.originZ?.z ?? 0);
+			trace(z1 + ' : ' + z2);
+			return Std.int(z2 - z1);
 		});
 		for (basic in members)
 		{

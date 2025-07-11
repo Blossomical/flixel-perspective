@@ -16,7 +16,7 @@ class PerspectiveShader extends FlxShader
 		uniform float zCoord;
 		uniform float fov;
 
-		uniform vec2 centerOffset; // important for centering the origin!!
+		uniform vec3 centerOffset; // important for centering the origin!!
 		varying vec2 vTexCoord;
 		varying float vDepth;
 
@@ -44,7 +44,7 @@ class PerspectiveShader extends FlxShader
 		  0.0, 0.0, 0.0, 1.0
 		);
 
-		vec4 normalizedOffset = openfl_Matrix * vec4(centerOffset, 0.0, 0.0);
+		vec4 normalizedOffset = openfl_Matrix * vec4(centerOffset, 0.0);
 		vec4 pos = openfl_Position;
 		pos.xy += centerOffset.xy;
 		gl_Position = openfl_Matrix * pos;
@@ -62,8 +62,9 @@ class PerspectiveShader extends FlxShader
 		  0.0, 0.0, zCoord, 1.0
 		); // thanks to checkmate50 on discord for helping me on this!!
 
-		gl_Position.z = zCoord;
+		gl_Position.z = zCoord + centerOffset.z;
 		gl_Position = projection * (translateNegZ * (rotate3D(angleX, angleY) * (translateZ * gl_Position)));
+		gl_Position.z -= centerOffset.z;
 		gl_Position.w = gl_Position.z;
 		gl_Position.xy -= normalizedOffset.xy * gl_Position.w;
 
@@ -115,7 +116,7 @@ class PerspectiveShader extends FlxShader
 		data.angleY.value = [0];
 		data.angleX.value = [0];
 		data.groupAngle.value = [0, 0];
-		data.centerOffset.value = [0, 0];
+		data.centerOffset.value = [0, 0, 0];
 		data.groupOffset.value = [0, 0];
 		data.depthColor.value = [0, 0, 0];
 		data.useDepthColor.value = [false];
