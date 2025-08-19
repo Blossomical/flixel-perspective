@@ -20,10 +20,15 @@ class PerspectiveShader extends FlxShader
 		varying vec2 vTexCoord;
 		varying float vDepth;
 
+		uniform bool invertY;
+
 		mat4 rotate3D(float x, float y) {
+			float yShift = 1.0;
+			if (invertY)
+				yShift = -1.0;
 			return mat4(
 			  1.0, 0.0, 0.0, 0.0,
-			  0.0, cos(x), -sin(x), 0.0,
+			  0.0, cos(x * yShift), -sin(x * yShift), 0.0,
 			  0.0, sin(x), cos(x), 0.0,
 			  0.0, 0.0, 0.0, 1.0
 			) * mat4(cos(y), 0.0, sin(y), 0.0,
@@ -121,5 +126,6 @@ class PerspectiveShader extends FlxShader
 		data.depthColor.value = [0, 0, 0];
 		data.useDepthColor.value = [false];
 		data.groupedAngle.value = [false];
+		data.invertY.value = [false];
 	}
 }
