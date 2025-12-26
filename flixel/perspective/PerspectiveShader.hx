@@ -32,7 +32,7 @@ class PerspectiveShader extends FlxShader
 			  0.0, sin(x), cos(x), 0.0,
 			  0.0, 0.0, 0.0, 1.0
 			) * mat4(cos(y), 0.0, sin(y), 0.0,
-			  0.0, 1, 0.0, 0.0,
+			  0.0, 1.0, 0.0, 0.0,
 			  -sin(y), 0.0, cos(y), 0.0,
 			  0.0, 0.0, 0.0, 1.0
 			);
@@ -40,7 +40,7 @@ class PerspectiveShader extends FlxShader
 	')
 	@:glVertexBody('
 		#pragma body
-		float zn = 1.0 / tan(fov / 2);
+		float zn = 1.0 / tan(fov / 2.0);
 
 		mat4 projection = mat4(
 		  zn, 0.0, 0.0, 0.0,
@@ -129,3 +129,4 @@ class PerspectiveShader extends FlxShader
 		data.invertY.value = [false];
 	}
 }
+
