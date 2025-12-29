@@ -9,8 +9,8 @@
         "extension"
     ],
     "description": "3D Rotation system for FlxSprites and FlxTexts with perspective and depth",
-    "version": "1.0.6",
-    "releasenote": "originZ is now a 3D point!",
+    "version": "1.0.7",
+    "releasenote": "from VortexOblivion: Fix decimals for certain GPU drivers",
     "contributors": [
         "Blossomical"
     ],
